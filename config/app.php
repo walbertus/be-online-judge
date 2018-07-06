@@ -152,6 +152,7 @@ return [
          */
         Silber\Bouncer\BouncerServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
+        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
 
         /*
          * Application Service Providers...
