@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Silber\Bouncer\BouncerFacade;
 
@@ -15,6 +16,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         BouncerFacade::cache();
+        Schema::defaultStringLength(191);
     }
 
     /**
