@@ -2,6 +2,7 @@
 
 namespace App\Api\V1\Controllers;
 
+use App\Api\V1\Domain\User\Services\CreateUserService;
 use App\Exceptions\ValidationException;
 use Dingo\Api\Exception\ResourceException;
 use Illuminate\Contracts\Validation\Validator;
@@ -13,10 +14,43 @@ class AuthController extends BaseController
 {
     const QUERY_EMAIL = 'email';
     const QUERY_PASSWORD = 'password';
+    const QUERY_NAME = 'name';
 
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => 'login']);
+        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+    }
+
+    public function register(
+        CreateUserService $service,
+        Request $request
+    )
+    {
+        $fields = $request->only([self::QUERY_NAME, self::QUERY_EMAIL, self::QUERY_PASSWORD]);
+
+        $validation = $this->validateRegister($fields);
+
+        if ($validation->fails()) {
+            $errors = $validation->errors();
+            throw new ResourceException('Validation error', $errors);
+        }
+
+        $name = $fields[self::QUERY_NAME];
+        $email = $fields[self::QUERY_EMAIL];
+        $password = $fields[self::QUERY_PASSWORD];
+
+        $service->createOne($name, $email, $password);
+
+        return $this->response->created();
+    }
+
+    protected function validateRegister(array $param): Validator
+    {
+        return $this->getValidationFactory()->make($param, [
+            self::QUERY_NAME => 'string|max:255|required',
+            self::QUERY_EMAIL => 'string|email|max:255|required|unique:users',
+            self::QUERY_PASSWORD => 'required|between:6,255',
+        ]);
     }
 
     public function login(Request $request): Response

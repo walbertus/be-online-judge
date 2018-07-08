@@ -10,6 +10,7 @@ $api->version('v1', function (Router $api) {
         'namespace' => 'App\Api\V1\Controllers',
     ], function (Router $api) {
         $api->group(['prefix' => 'auth'], function (Router $api) {
+            $api->post('register', 'AuthController@register');
             $api->post('login', 'AuthController@login');
             $api->post('logout', 'AuthController@logout');
             $api->post('refresh', 'AuthController@refresh');
