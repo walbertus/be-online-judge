@@ -2,18 +2,31 @@
 
 namespace App\Api\V1\Controllers;
 
-use Illuminate\Http\JsonResponse;
+use App\Exceptions\ValidationException;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends BaseController
 {
+    const QUERY_EMAIL = 'email';
+    const QUERY_PASSWORD = 'password';
+
     public function __construct()
     {
         $this->middleware('auth:api', ['except' => 'login']);
     }
 
-    public function login(): JsonResponse
+    public function login(Request $request): Response
     {
-        $credentials = request(['email', 'password']);
+        $credentials = $request->only([self::QUERY_EMAIL, self::QUERY_PASSWORD]);
+
+        $validation = $this->validateLogin($credentials);
+
+        if ($validation->fails()) {
+            $errors = $validation->errors();
+            throw new ValidationException($errors);
+        }
 
         if (!$token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
@@ -22,29 +35,37 @@ class AuthController extends BaseController
         return $this->respondWithToken($token);
     }
 
-    protected function respondWithToken($token): JsonResponse
+    protected function validateLogin(array $param): Validator
     {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60,
+        return $this->getValidationFactory()->make($param, [
+            self::QUERY_EMAIL => 'string|required|email',
+            self::QUERY_PASSWORD => 'string|required',
         ]);
     }
 
-    public function me(): JsonResponse
+    public function me(): Response
     {
         return response()->json(auth()->user());
     }
 
-    public function logout(): JsonResponse
+    public function logout(): Response
     {
         auth()->logout();
 
         return response()->json(['message' => 'Successfully logged out']);
     }
 
-    public function refresh(): JsonResponse
+    public function refresh(): Response
     {
         return $this->respondWithToken(auth()->refresh());
+    }
+
+    protected function respondWithToken($token): Response
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60,
+        ]);
     }
 }
