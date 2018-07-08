@@ -4,7 +4,6 @@ namespace App\Api\V1\Controllers;
 
 use App\Api\V1\Domain\User\Services\CreateUserService;
 use App\Exceptions\ValidationException;
-use Dingo\Api\Exception\ResourceException;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,7 +31,7 @@ class AuthController extends BaseController
 
         if ($validation->fails()) {
             $errors = $validation->errors();
-            throw new ResourceException('Validation error', $errors);
+            throw new ValidationException($errors);
         }
 
         $name = $fields[self::QUERY_NAME];
@@ -61,7 +60,7 @@ class AuthController extends BaseController
 
         if ($validation->fails()) {
             $errors = $validation->errors();
-            throw new ResourceException('Validation error', $errors);
+            throw new ValidationException($errors);
         }
 
         if (!$token = auth()->attempt($credentials)) {
