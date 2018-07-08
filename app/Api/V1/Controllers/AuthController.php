@@ -3,9 +3,11 @@
 namespace App\Api\V1\Controllers;
 
 use App\Exceptions\ValidationException;
+use Dingo\Api\Exception\ResourceException;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class AuthController extends BaseController
 {
@@ -25,11 +27,11 @@ class AuthController extends BaseController
 
         if ($validation->fails()) {
             $errors = $validation->errors();
-            throw new ValidationException($errors);
+            throw new ResourceException('Validation error', $errors);
         }
 
         if (!$token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            throw new BadRequestHttpException('Credential mismatch');
         }
 
         return $this->respondWithToken($token);
