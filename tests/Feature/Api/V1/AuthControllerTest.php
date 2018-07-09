@@ -46,21 +46,24 @@ class AuthControllerTest extends FeatureTestCase
             self::PARAM_EMAIL => self::USER_EMAIL,
             self::PARAM_PASSWORD => self::USER_PASSWORD,
         ]);
+
         $response->assertStatus(422);
-        $jsonResponse = $this->responseToArray($response);
-        $this->assertArrayHasKey('errors', $jsonResponse);
-        $this->assertArrayHasKey(self::PARAM_EMAIL, $jsonResponse['errors']);
+        $response->assertJsonStructure([
+            'errors' => [
+                self::PARAM_EMAIL,
+            ],
+        ]);
     }
 
     public function testRegisterValidationError(): void
     {
         $response = $this->call('POST', self::URI_REGISTER);
         $response->assertStatus(422);
-        $jsonResponse = $this->responseToArray($response);
-        $this->assertArrayHasKey('errors', $jsonResponse);
-        $this->assertArrayHasKey(self::PARAM_EMAIL, $jsonResponse['errors']);
-        $this->assertArrayHasKey(self::PARAM_NAME, $jsonResponse['errors']);
-        $this->assertArrayHasKey(self::PARAM_PASSWORD, $jsonResponse['errors']);
+        $response->assertJsonStructure([
+            'errors' => [
+                self::PARAM_EMAIL, self::PARAM_PASSWORD, self::PARAM_NAME,
+            ],
+        ]);
 
         $response = $this->call('POST', self::URI_REGISTER, [
             self::PARAM_NAME => self::USER_NAME,
@@ -68,10 +71,11 @@ class AuthControllerTest extends FeatureTestCase
             self::PARAM_PASSWORD => self::USER_PASSWORD_SHORT,
         ]);
         $response->assertStatus(422);
-        $jsonResponse = $this->responseToArray($response);
-        $this->assertArrayHasKey('errors', $jsonResponse);
-        $this->assertArrayHasKey(self::PARAM_PASSWORD, $jsonResponse['errors']);
-        $this->assertArrayHasKey(self::PARAM_EMAIL, $jsonResponse['errors']);
+        $response->assertJsonStructure([
+            'errors' => [
+                self::PARAM_PASSWORD, self::PARAM_EMAIL,
+            ],
+        ]);
     }
 
     public function testLoginSuccessful()
