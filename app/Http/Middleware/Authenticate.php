@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use App\Exceptions\AccessDeniedException;
 use Illuminate\Auth\AuthenticationException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class Authenticate extends \Illuminate\Auth\Middleware\Authenticate
 {
@@ -13,7 +13,7 @@ class Authenticate extends \Illuminate\Auth\Middleware\Authenticate
             parent::authenticate($guards);
         } catch (AuthenticationException $exception) {
             // Change to part of HttpException so Dingo can catch it
-            throw new AccessDeniedException("Unauthorized access");
+            throw new UnauthorizedHttpException(null, "User is not logged in");
         }
     }
 }
