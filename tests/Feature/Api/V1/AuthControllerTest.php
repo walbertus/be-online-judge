@@ -47,7 +47,7 @@ class AuthControllerTest extends FeatureTestCase
             self::PARAM_PASSWORD => self::USER_PASSWORD,
         ]);
         $response->assertStatus(422);
-        $jsonResponse = json_decode($response->getContent(), true);
+        $jsonResponse = $this->responseToArray($response);
         $this->assertArrayHasKey('errors', $jsonResponse);
         $this->assertArrayHasKey(self::PARAM_EMAIL, $jsonResponse['errors']);
     }
@@ -56,7 +56,7 @@ class AuthControllerTest extends FeatureTestCase
     {
         $response = $this->call('POST', self::URI_REGISTER);
         $response->assertStatus(422);
-        $jsonResponse = json_decode($response->getContent(), true);
+        $jsonResponse = $this->responseToArray($response);
         $this->assertArrayHasKey('errors', $jsonResponse);
         $this->assertArrayHasKey(self::PARAM_EMAIL, $jsonResponse['errors']);
         $this->assertArrayHasKey(self::PARAM_NAME, $jsonResponse['errors']);
@@ -68,7 +68,7 @@ class AuthControllerTest extends FeatureTestCase
             self::PARAM_PASSWORD => self::USER_PASSWORD_SHORT,
         ]);
         $response->assertStatus(422);
-        $jsonResponse = json_decode($response->getContent(), true);
+        $jsonResponse = $this->responseToArray($response);
         $this->assertArrayHasKey('errors', $jsonResponse);
         $this->assertArrayHasKey(self::PARAM_PASSWORD, $jsonResponse['errors']);
         $this->assertArrayHasKey(self::PARAM_EMAIL, $jsonResponse['errors']);

@@ -23,4 +23,9 @@ class FeatureTestCase extends TestCase
         $server['HTTP_ACCEPT'] = 'application/json';
         return $this->call($method, $uri, $parameters, $cookies, $files, $server, $content);
     }
+
+    protected function responseToArray(TestResponse $response): array
+    {
+        return json_decode($response->getContent(), true);
+    }
 }
