@@ -18,7 +18,10 @@ class AuthControllerTest extends FeatureTestCase
     const USER_EMAIL = 'user@user.com';
     const USER_PASSWORD = 'secret';
     const USER_NAME = 'William AD';
+
+    const USER_EMAIL_WRONG = 'w.albertusd@gmail.com';
     const USER_PASSWORD_SHORT = 'sec';
+    const USER_PASSWORD_WRONG = 'secrets';
 
     const URI_REGISTER = 'api/auth/register';
     const URI_LOGIN = 'api/auth/login';
@@ -93,6 +96,55 @@ class AuthControllerTest extends FeatureTestCase
         return $this->call('POST', self::URI_LOGIN, [
             self::PARAM_EMAIL => self::USER_EMAIL,
             self::PARAM_PASSWORD => self::USER_PASSWORD,
+        ]);
+    }
+
+    public function testLoginCredentialMismatchWrongPassword()
+    {
+        $this->createUser();
+        $response = $this->call('POST', self::URI_LOGIN, [
+            self::PARAM_EMAIL => self::USER_EMAIL,
+            self::PARAM_PASSWORD => self::USER_PASSWORD_WRONG,
+        ]);
+
+        $response->assertStatus(400);
+        $response->assertJsonStructure([
+            'message',
+            'status_code',
+        ]);
+        $jsonResponse = $this->responseToArray($response);
+        $this->assertEquals($jsonResponse['message'], 'Credential mismatch');
+        $this->assertEquals($jsonResponse['status_code'], 400);
+    }
+
+    public function testLoginCredentialMismatchWrongEmail()
+    {
+        $this->createUser();
+        $response = $this->call('POST', self::URI_LOGIN, [
+            self::PARAM_EMAIL => self::USER_EMAIL_WRONG,
+            self::PARAM_PASSWORD => self::USER_PASSWORD,
+        ]);
+
+        $response->assertStatus(400);
+        $response->assertJsonStructure([
+            'message',
+            'status_code',
+        ]);
+        $jsonResponse = $this->responseToArray($response);
+        $this->assertEquals($jsonResponse['message'], 'Credential mismatch');
+        $this->assertEquals($jsonResponse['status_code'], 400);
+    }
+
+    public function testLoginValidationError()
+    {
+        $this->createUser();
+        $response = $this->callApi('POST', self::URI_LOGIN);
+
+        $response->assertStatus(422);
+        $response->assertJsonStructure([
+            'errors' => [
+                self::PARAM_PASSWORD, self::PARAM_EMAIL,
+            ],
         ]);
     }
 
