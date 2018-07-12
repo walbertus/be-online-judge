@@ -25,6 +25,7 @@ class AuthControllerTest extends FeatureTestCase
 
     const URI_REGISTER = 'api/auth/register';
     const URI_LOGIN = 'api/auth/login';
+    const URI_ME = 'api/auth/me';
 
     public function testRegisterSuccess(): void
     {
@@ -145,6 +146,31 @@ class AuthControllerTest extends FeatureTestCase
             'errors' => [
                 self::PARAM_PASSWORD, self::PARAM_EMAIL,
             ],
+        ]);
+    }
+
+    public function testMeSuccess()
+    {
+        $this->createUser();
+        $loginResponse = $this->validLogin();
+        $loginResponse = $this->responseToArray($loginResponse);
+        $token = $loginResponse['access_token'];
+        $header = [
+            'Authorization' => "Bearer $token",
+        ];
+        $response = $this->callApi('GET', self::URI_ME, [], [], [], $header);
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'id', 'name', 'email',
+        ]);
+    }
+
+    public function testMeUnauthenticated()
+    {
+        $response = $this->callApi('GET', self::URI_ME);
+        $response->assertStatus(401);
+        $response->assertJsonStructure([
+            'message', 'status_code',
         ]);
     }
 
