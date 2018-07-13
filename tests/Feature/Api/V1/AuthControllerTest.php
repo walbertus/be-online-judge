@@ -26,6 +26,7 @@ class AuthControllerTest extends FeatureTestCase
     const URI_REGISTER = 'api/auth/register';
     const URI_LOGIN = 'api/auth/login';
     const URI_ME = 'api/auth/me';
+    const URI_LOGOUT = 'api/auth/logout';
 
     public function testRegisterSuccess(): void
     {
@@ -151,13 +152,7 @@ class AuthControllerTest extends FeatureTestCase
 
     public function testMeSuccess()
     {
-        $this->createUser();
-        $loginResponse = $this->validLogin();
-        $loginResponse = $this->responseToArray($loginResponse);
-        $token = $loginResponse['access_token'];
-        $header = [
-            'Authorization' => "Bearer $token",
-        ];
+        $header = $this->getAuthHeader();
         $response = $this->callApi('GET', self::URI_ME, [], [], [], $header);
         $response->assertStatus(200);
         $response->assertJsonStructure([
@@ -172,6 +167,26 @@ class AuthControllerTest extends FeatureTestCase
         $response->assertJsonStructure([
             'message', 'status_code',
         ]);
+    }
+
+    public function testLogoutSuccess()
+    {
+        $header = $this->getAuthHeader();
+        $response = $this->callApi('POST', self::URI_LOGOUT, [], [], [], $header);
+        $response->assertStatus(200);
+        $response = $this->callApi('POST', self::URI_LOGOUT, [], [], [], $header);
+        $response->assertStatus(401);
+    }
+
+    protected function getAuthHeader(): array
+    {
+        $this->createUser();
+        $loginResponse = $this->validLogin();
+        $loginResponse = $this->responseToArray($loginResponse);
+        $token = $loginResponse['access_token'];
+        return [
+            'Authorization' => "Bearer $token",
+        ];
     }
 
     protected function createUser(): void
