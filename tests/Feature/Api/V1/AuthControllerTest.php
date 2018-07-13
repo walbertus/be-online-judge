@@ -27,6 +27,7 @@ class AuthControllerTest extends FeatureTestCase
     const URI_LOGIN = 'api/auth/login';
     const URI_ME = 'api/auth/me';
     const URI_LOGOUT = 'api/auth/logout';
+    const URI_REFRESH = 'api/auth/refresh';
 
     public function testRegisterSuccess(): void
     {
@@ -176,6 +177,16 @@ class AuthControllerTest extends FeatureTestCase
         $response->assertStatus(200);
         $response = $this->callApi('POST', self::URI_LOGOUT, [], [], [], $header);
         $response->assertStatus(401);
+    }
+
+    public function testRefreshSuccess()
+    {
+        $header = $this->getAuthHeader();
+        $response = $this->callApi('POST', self::URI_REFRESH, [], [], [], $header);
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'access_token',
+        ]);
     }
 
     protected function getAuthHeader(): array
