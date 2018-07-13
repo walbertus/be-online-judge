@@ -13,6 +13,7 @@ class User extends Authenticatable implements JWTSubject
     use Notifiable;
     use HasRolesAndAbilities;
 
+    const ATTRIBUTE_ID = 'id';
     const ATTRIBUTE_NAME = 'name';
     const ATTRIBUTE_EMAIL = 'email';
     const ATTRIBUTE_PASSWORD = 'password';
