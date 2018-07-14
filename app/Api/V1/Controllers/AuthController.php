@@ -4,7 +4,6 @@ namespace App\Api\V1\Controllers;
 
 use App\Api\V1\Domain\User\Services\CreateUserService;
 use App\Api\V1\Domain\User\Transformer\UserTransformer;
-use App\Exceptions\ValidationException;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,16 +23,12 @@ class AuthController extends BaseController
     public function register(
         CreateUserService $service,
         Request $request
-    )
+    ): Response
     {
         $fields = $request->only([self::QUERY_NAME, self::QUERY_EMAIL, self::QUERY_PASSWORD]);
 
         $validation = $this->validateRegister($fields);
-
-        if ($validation->fails()) {
-            $errors = $validation->errors();
-            throw new ValidationException($errors);
-        }
+        $this->checkValidation($validation);
 
         $name = $fields[self::QUERY_NAME];
         $email = $fields[self::QUERY_EMAIL];
@@ -58,11 +53,7 @@ class AuthController extends BaseController
         $credentials = $request->only([self::QUERY_EMAIL, self::QUERY_PASSWORD]);
 
         $validation = $this->validateLogin($credentials);
-
-        if ($validation->fails()) {
-            $errors = $validation->errors();
-            throw new ValidationException($errors);
-        }
+        $this->checkValidation($validation);
 
         if (!$token = auth()->attempt($credentials)) {
             throw new BadRequestHttpException('Credential mismatch');

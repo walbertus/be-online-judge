@@ -16,5 +16,9 @@ $api->version('v1', function (Router $api) {
             $api->post('refresh', 'AuthController@refresh');
             $api->get('me', 'AuthController@me');
         });
+
+        $api->group(['prefix' => 'problems'], function (Router $api) {
+            $api->post('/', 'ProblemController@store');
+        });
     });
 });
