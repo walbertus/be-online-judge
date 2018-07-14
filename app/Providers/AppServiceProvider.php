@@ -2,21 +2,17 @@
 
 namespace App\Providers;
 
-use App\Exceptions\ValidationException;
+use App\Api\V1\Domain\Role\Entity\Role;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
-use Silber\Bouncer\BouncerFacade;
+use Silber\Bouncer\Bouncer;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
-    public function boot()
+    public function boot(Bouncer $bouncer): void
     {
-        BouncerFacade::cache();
+        $bouncer->cache();
+        $bouncer->useRoleModel(Role::class);
         Schema::defaultStringLength(191);
     }
 

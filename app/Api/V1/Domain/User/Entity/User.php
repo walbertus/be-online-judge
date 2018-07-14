@@ -4,6 +4,7 @@ namespace App\Api\V1\Domain\User\Entity;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -33,6 +34,11 @@ class User extends Authenticatable implements JWTSubject
     {
         $hashedPassword = Hash::make($password);
         $this->setAttribute(self::ATTRIBUTE_PASSWORD, $hashedPassword);
+    }
+
+    public function getRoles(): Collection
+    {
+        return $this->roles;
     }
 
     public function getJWTIdentifier()
