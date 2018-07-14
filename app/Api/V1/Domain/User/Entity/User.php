@@ -2,6 +2,8 @@
 
 namespace App\Api\V1\Domain\User\Entity;
 
+use App\Api\V1\Domain\Problem\Entity\Problem;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
@@ -19,6 +21,11 @@ class User extends Authenticatable implements JWTSubject
     const ATTRIBUTE_EMAIL = 'email';
     const ATTRIBUTE_PASSWORD = 'password';
     const ATTRIBUTE_REMEMBER_TOKEN = 'remember_token';
+
+    public function problems(): HasMany
+    {
+        return $this->hasMany(Problem::class, Problem::ATTRIBUTE_OWNER_ID, self::ATTRIBUTE_ID);
+    }
 
     public function setName(string $name): void
     {
