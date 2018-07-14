@@ -12,5 +12,6 @@ class BouncerSeeder extends Seeder
             'title' => 'Problem setter',
         ]);
         $problemSetter->save();
+        $problemSetter->allow('create-problems');
     }
 }

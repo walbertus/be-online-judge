@@ -18,7 +18,7 @@ $api->version('v1', function (Router $api) {
         });
 
         $api->group(['prefix' => 'problems'], function (Router $api) {
-            $api->post('/', 'ProblemController@store');
+            $api->post('/', 'ProblemController@store')->middleware('auth:api');
         });
     });
 });
