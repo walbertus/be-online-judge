@@ -3,6 +3,7 @@
 namespace App\Api\V1\Controllers;
 
 use App\Api\V1\Domain\User\Services\CreateUserService;
+use App\Api\V1\Domain\User\Transformer\UserTransformer;
 use App\Exceptions\ValidationException;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
@@ -78,9 +79,10 @@ class AuthController extends BaseController
         ]);
     }
 
-    public function me(): Response
+    public function me(UserTransformer $userTransformer): Response
     {
-        return response()->json(auth()->user());
+        $user = auth()->user();
+        return $this->response->item($user, $userTransformer);
     }
 
     public function logout(): Response

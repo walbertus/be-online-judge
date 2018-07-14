@@ -157,7 +157,9 @@ class AuthControllerTest extends FeatureTestCase
         $response = $this->callApi('GET', self::URI_ME, [], [], [], $header);
         $response->assertStatus(200);
         $response->assertJsonStructure([
-            'id', 'name', 'email',
+            'data' => [
+                'id', 'name', 'email',
+            ],
         ]);
     }
 
