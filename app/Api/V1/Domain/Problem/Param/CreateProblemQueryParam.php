@@ -12,7 +12,6 @@ class CreateProblemQueryParam
         Problem::ATTRIBUTE_DESCRIPTION,
         Problem::ATTRIBUTE_MEMORY_LIMIT,
         Problem::ATTRIBUTE_TIME_LIMIT,
-        Problem::ATTRIBUTE_OWNER_ID,
     ];
 
     const QUERY_PARAM_VALIDATION = [
@@ -25,7 +24,6 @@ class CreateProblemQueryParam
         Problem::ATTRIBUTE_DESCRIPTION => 'string|required',
         Problem::ATTRIBUTE_MEMORY_LIMIT => 'numeric|nullable|between:0,255',
         Problem::ATTRIBUTE_TIME_LIMIT => 'numeric|nullable|between:0,10000',
-        Problem::ATTRIBUTE_OWNER_ID => 'required|numeric|exists:users,id',
     ];
 
     protected $data = [];
@@ -51,7 +49,14 @@ class CreateProblemQueryParam
         $this->data[Problem::ATTRIBUTE_TIME_LIMIT] = isset($array[Problem::ATTRIBUTE_TIME_LIMIT])
             ? $array[Problem::ATTRIBUTE_TIME_LIMIT]
             : Problem::DEFAULT_TIME_LIMIT;
-        $this->data[Problem::ATTRIBUTE_OWNER_ID] = $array[Problem::ATTRIBUTE_OWNER_ID];
+        $this->data[Problem::ATTRIBUTE_OWNER_ID] = isset($array[Problem::ATTRIBUTE_OWNER_ID])
+            ? $array[Problem::ATTRIBUTE_OWNER_ID]
+            : null;
+    }
+
+    public function setOwnerId(int $ownerId): void
+    {
+        $this->data[Problem::ATTRIBUTE_OWNER_ID] = $ownerId;
     }
 
     public function toArray(): array

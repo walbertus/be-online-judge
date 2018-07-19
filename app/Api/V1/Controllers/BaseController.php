@@ -2,6 +2,7 @@
 
 namespace App\Api\V1\Controllers;
 
+use App\Api\V1\Domain\User\Entity\User;
 use App\Exceptions\AccessDeniedException;
 use App\Exceptions\ValidationException;
 use Dingo\Api\Routing\Helpers;
@@ -21,11 +22,16 @@ class BaseController extends Controller
         }
     }
 
-    protected function checkRole(string $role)
+    protected function checkRole(string $role): void
     {
-        $user = auth()->user();
+        $user = $this->getCurrentUser();
         if (!$user->isA($role))
             throw new AccessDeniedException();
+    }
+
+    protected function getCurrentUser(): User
+    {
+        return auth()->user();
     }
 
 }

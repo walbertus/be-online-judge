@@ -5,6 +5,7 @@ namespace App\Api\V1\Controllers;
 
 use App\Api\V1\Domain\Problem\Param\CreateProblemQueryParam;
 use App\Api\V1\Domain\Problem\Services\CreateProblemService;
+use App\Api\V1\Domain\User\Entity\User;
 use Dingo\Api\Http\Response;
 use Illuminate\Http\Request;
 
@@ -24,6 +25,9 @@ class ProblemController extends BaseController
 
         $params = new CreateProblemQueryParam();
         $params->fromArray($fields);
+
+        $user = $this->getCurrentUser();
+        $params->setOwnerId($user->getAttribute(User::ATTRIBUTE_ID));
 
         $service->createOne($params);
         return $this->response->created();
