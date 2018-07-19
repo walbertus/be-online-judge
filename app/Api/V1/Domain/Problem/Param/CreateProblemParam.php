@@ -4,7 +4,7 @@ namespace App\Api\V1\Domain\Problem\Param;
 
 use App\Api\V1\Domain\Problem\Entity\Problem;
 
-class CreateProblemQueryParam
+class CreateProblemParam
 {
     const QUERY_PARAMS = [
         Problem::ATTRIBUTE_SLUG,
