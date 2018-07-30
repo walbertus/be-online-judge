@@ -4,7 +4,10 @@ namespace App\Api\V1\Controllers;
 
 
 use App\Api\V1\Domain\Problem\Param\CreateProblemParam;
+use App\Api\V1\Domain\Problem\Param\ReadProblemParam;
 use App\Api\V1\Domain\Problem\Services\CreateProblemService;
+use App\Api\V1\Domain\Problem\Services\ReadProblemService;
+use App\Api\V1\Domain\Problem\Transformer\ProblemTransformer;
 use App\Api\V1\Domain\User\Entity\User;
 use Dingo\Api\Http\Response;
 use Illuminate\Http\Request;
@@ -31,5 +34,30 @@ class ProblemController extends BaseController
 
         $service->createOne($params);
         return $this->response->created();
+    }
+
+    public function index(
+        ProblemTransformer $problemTransformer,
+        ReadProblemService $service,
+        Request $request
+    ):Response
+    {
+        $fields = $request->only(ReadProblemParam::QUERY_INDEX_PARAMS);
+
+        $params = new ReadProblemParam();
+        $params->fromArray($fields);
+
+        $problems = $service->readMany($params);
+        return $this->response->item($problems,$problemTransformer);
+    }
+
+    public function show(
+        ProblemTransformer $problemTransformer,
+        ReadProblemService $service,
+        $id
+    ):Response
+    {
+        $problem = $service->readSingle($id);
+        return $this->response->item($problem,$problemTransformer);
     }
 }
