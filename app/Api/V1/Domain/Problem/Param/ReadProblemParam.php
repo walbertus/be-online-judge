@@ -8,7 +8,7 @@ class ReadProblemParam
     const ATTRIBUTE_PAGE = 'page';
     const ATTRIBUTE_LIMIT = 'limit';
 
-    const QUERY_INDEX_PARAMS = [
+    const QUERY_PARAMS = [
         ReadProblemParam::ATTRIBUTE_PAGE,
         ReadProblemParam::ATTRIBUTE_LIMIT,
     ];
@@ -27,8 +27,13 @@ class ReadProblemParam
         $this->data[ReadProblemParam::ATTRIBUTE_LIMIT] = $array[ReadProblemParam::ATTRIBUTE_LIMIT];
     }
 
-    public function toArray() : array
+    public function getLimit() : int
     {
-        return $this->data;
+        return $this->data[ReadProblemParam::ATTRIBUTE_LIMIT];
+    }
+
+    public function getOffset() : int
+    {
+        return $this->data[ReadProblemParam::ATTRIBUTE_PAGE]*$this->getLimit();
     }
 }

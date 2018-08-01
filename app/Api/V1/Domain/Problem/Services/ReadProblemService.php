@@ -19,15 +19,13 @@ class ReadProblemService
 
     public function readMany(ReadProblemParam $param) : Collection
     {
-        $param = $param->toArray();
-
-        $offset = $param[ReadProblemParam::ATTRIBUTE_PAGE]*$param[ReadProblemParam::ATTRIBUTE_LIMIT];
-        $limit = $param[ReadProblemParam::ATTRIBUTE_LIMIT];
+        $offset = $param->getOffset();
+        $limit = $param->getLimit();
 
         return $this->repository->readMany($offset,$limit);
     }
 
-    public function readSingle($id) : Problem
+    public function readSingle(int $id) : Problem
     {
         return $this->repository->readSingle($id);
     }

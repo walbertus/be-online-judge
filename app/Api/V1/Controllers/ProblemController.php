@@ -40,24 +40,24 @@ class ProblemController extends BaseController
         ProblemTransformer $problemTransformer,
         ReadProblemService $service,
         Request $request
-    ):Response
+    ): Response
     {
-        $fields = $request->only(ReadProblemParam::QUERY_INDEX_PARAMS);
+        $fields = $request->only(ReadProblemParam::QUERY_PARAMS);
 
         $params = new ReadProblemParam();
         $params->fromArray($fields);
 
         $problems = $service->readMany($params);
-        return $this->response->item($problems,$problemTransformer);
+        return $this->response->collection($problems, $problemTransformer);
     }
 
     public function show(
         ProblemTransformer $problemTransformer,
         ReadProblemService $service,
-        $id
-    ):Response
+        int $id
+    ): Response
     {
         $problem = $service->readSingle($id);
-        return $this->response->item($problem,$problemTransformer);
+        return $this->response->item($problem, $problemTransformer);
     }
 }

@@ -12,12 +12,12 @@ class ProblemRepository
         return Problem::create($data);
     }
 
-    public function readMany($offset, $limit): Collection
+    public function readMany(int $offset,int $limit): Collection
     {
         return Problem::skip($offset)->take($limit)->get();
     }
 
-    public function readSingle($id): Problem
+    public function readSingle(int $id): Problem
     {
         return Problem::find($id);
     }
