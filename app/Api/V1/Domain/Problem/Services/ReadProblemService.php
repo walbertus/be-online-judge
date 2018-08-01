@@ -6,7 +6,7 @@ namespace App\Api\V1\Domain\Problem\Services;
 use App\Api\V1\Domain\Problem\Entity\Problem;
 use App\Api\V1\Domain\Problem\Param\ReadProblemParam;
 use App\Api\V1\Domain\Problem\Repository\ProblemRepository;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\Paginator;
 
 class ReadProblemService
 {
@@ -17,12 +17,11 @@ class ReadProblemService
         $this->repository = $repository;
     }
 
-    public function readMany(ReadProblemParam $param) : Collection
+    public function readMany(ReadProblemParam $param) : Paginator
     {
-        $offset = $param->getOffset();
         $limit = $param->getLimit();
 
-        return $this->repository->readMany($offset,$limit);
+        return $this->repository->readMany($limit);
     }
 
     public function readSingle(int $id) : Problem

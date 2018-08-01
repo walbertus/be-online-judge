@@ -48,7 +48,7 @@ class ProblemController extends BaseController
         $params->fromArray($fields);
 
         $problems = $service->readMany($params);
-        return $this->response->collection($problems, $problemTransformer);
+        return $this->response->paginator($problems, $problemTransformer);
     }
 
     public function show(

@@ -3,7 +3,7 @@
 namespace App\Api\V1\Domain\Problem\Repository;
 
 use App\Api\V1\Domain\Problem\Entity\Problem;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\Paginator;
 
 class ProblemRepository
 {
@@ -12,9 +12,9 @@ class ProblemRepository
         return Problem::create($data);
     }
 
-    public function readMany(int $offset,int $limit): Collection
+    public function readMany(int $limit): Paginator
     {
-        return Problem::skip($offset)->take($limit)->get();
+        return Problem::paginate($limit);
     }
 
     public function readSingle(int $id): Problem
