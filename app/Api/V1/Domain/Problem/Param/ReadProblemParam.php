@@ -18,12 +18,12 @@ class ReadProblemParam
         $this->data[ReadProblemParam::ATTRIBUTE_LIMIT] = null;
     }
 
-    public function fromArray(array $array) : void
+    public function fromArray(array $array): void
     {
         $this->data[ReadProblemParam::ATTRIBUTE_LIMIT] = $array[ReadProblemParam::ATTRIBUTE_LIMIT];
     }
 
-    public function getLimit() : int
+    public function getLimit(): int
     {
         return $this->data[ReadProblemParam::ATTRIBUTE_LIMIT];
     }

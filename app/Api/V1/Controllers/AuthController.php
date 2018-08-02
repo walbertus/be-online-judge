@@ -70,6 +70,15 @@ class AuthController extends BaseController
         ]);
     }
 
+    protected function respondWithToken($token): Response
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60,
+        ]);
+    }
+
     public function me(UserTransformer $userTransformer): Response
     {
         $user = auth()->user();
@@ -86,14 +95,5 @@ class AuthController extends BaseController
     public function refresh(): Response
     {
         return $this->respondWithToken(auth()->refresh());
-    }
-
-    protected function respondWithToken($token): Response
-    {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60,
-        ]);
     }
 }
