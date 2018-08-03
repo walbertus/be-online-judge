@@ -17,11 +17,11 @@ class ReadProblemService
         $this->repository = $repository;
     }
 
-    public function readMany(ReadProblemParam $param): Paginator
+    public function readMany(ReadProblemParam $param, int $limit): Paginator
     {
-        $limit = $param->getLimit();
+        $ownerId = $param->getOwnerId();
 
-        return $this->repository->readMany($limit);
+        return $this->repository->readMany($ownerId, $limit);
     }
 
     public function readSingle(int $id): Problem

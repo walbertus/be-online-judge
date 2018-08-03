@@ -12,9 +12,13 @@ class ProblemRepository
         return Problem::create($data);
     }
 
-    public function readMany(int $limit): Paginator
+    public function readMany(?int $ownerId, $limit): Paginator
     {
-        return Problem::paginate($limit);
+        if ($ownerId) {
+            return Problem::where('owner_id', $ownerId)->paginate($limit);
+        } else {
+            return Problem::paginate($limit);
+        }
     }
 
     public function readSingle(int $id): Problem

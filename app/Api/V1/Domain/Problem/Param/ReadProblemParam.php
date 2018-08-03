@@ -5,26 +5,30 @@ namespace App\Api\V1\Domain\Problem\Param;
 
 class ReadProblemParam
 {
-    const ATTRIBUTE_LIMIT = 'limit';
+    const ATTRIBUTE_OWNER_ID = 'owner_id';
 
     const QUERY_PARAMS = [
-        ReadProblemParam::ATTRIBUTE_LIMIT,
+        ReadProblemParam::ATTRIBUTE_OWNER_ID,
     ];
 
-    protected $data;
+    const QUERY_PARAMS_VALIDATION = [
+        ReadProblemParam::ATTRIBUTE_OWNER_ID => 'numeric|nullable',
+    ];
+
+    protected $data = [];
 
     public function __construct()
     {
-        $this->data[ReadProblemParam::ATTRIBUTE_LIMIT] = null;
+        $this->data[ReadProblemParam::ATTRIBUTE_OWNER_ID] = null;
     }
 
     public function fromArray(array $array): void
     {
-        $this->data[ReadProblemParam::ATTRIBUTE_LIMIT] = $array[ReadProblemParam::ATTRIBUTE_LIMIT];
+        $this->data[ReadProblemParam::ATTRIBUTE_OWNER_ID] = $array[ReadProblemParam::ATTRIBUTE_OWNER_ID];
     }
 
-    public function getLimit(): int
+    public function getOwnerId(): ?int
     {
-        return $this->data[ReadProblemParam::ATTRIBUTE_LIMIT];
+        return $this->data[ReadProblemParam::ATTRIBUTE_OWNER_ID];
     }
 }
