@@ -10,7 +10,7 @@ class ProblemQueryGenerator
     public function buildQuery(ReadProblemParam $queryParams): array
     {
         $finalQuery = [];
-        $finalQuery = ProblemQueryGenerator::buildOwnerIdQuery($finalQuery, $queryParams);
+        $finalQuery = $this->buildOwnerIdQuery($finalQuery, $queryParams);
 
         return $finalQuery;
     }
