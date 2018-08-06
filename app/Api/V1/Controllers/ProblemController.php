@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 class ProblemController extends BaseController
 {
     const QUERY_LIMIT = 'limit';
+    const DEFAULT_LIMIT = 10;
 
     public function store(
         CreateProblemService $service,
@@ -43,7 +44,7 @@ class ProblemController extends BaseController
         Request $request
     ): Response
     {
-        $limit = $request->get(self::QUERY_LIMIT, 10);
+        $limit = $request->get(self::QUERY_LIMIT, self::DEFAULT_LIMIT);
         $fields = $request->only(ReadProblemParam::QUERY_PARAMS);
 
         $validation = $this->getValidationFactory()->make($fields, ReadProblemParam::QUERY_PARAMS_VALIDATION);
