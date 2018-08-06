@@ -24,7 +24,7 @@ class ProblemQueryGenerator
     static public function buildOwnerIdQuery(array $query, ReadProblemParam $queryParams): array
     {
         if ($queryParams->getOwnerId()) {
-            $query[] = ['owner_id' => $queryParams->getOwnerId()];
+            $query[] = ['owner_id', $queryParams->getOwnerId()];
         }
         return $query;
     }
