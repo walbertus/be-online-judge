@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\V1\Domain\Problem\Helper;
+namespace App\Api\V1\Domain\Problem\Repository;
 
 
 use App\Api\V1\Domain\Problem\Param\ReadProblemParam;
