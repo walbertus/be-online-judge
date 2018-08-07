@@ -17,7 +17,7 @@ class CreateProblemParam
     const QUERY_PARAM_VALIDATION = [
         Problem::ATTRIBUTE_SLUG => [
             'required',
-            'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
+            'regex:/^[A-Z0-9]+(?:-[A-Z0-9]+)*$/',
             'unique:problems,slug'
         ],
         Problem::ATTRIBUTE_TITLE => 'string|required',
