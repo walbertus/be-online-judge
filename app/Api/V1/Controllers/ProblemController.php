@@ -5,8 +5,11 @@ namespace App\Api\V1\Controllers;
 
 use App\Api\V1\Domain\Problem\Param\CreateProblemParam;
 use App\Api\V1\Domain\Problem\Param\ReadProblemParam;
+use App\Api\V1\Domain\Problem\Param\UpdateProblemParam;
 use App\Api\V1\Domain\Problem\Services\CreateProblemService;
+use App\Api\V1\Domain\Problem\Services\DeleteProblemService;
 use App\Api\V1\Domain\Problem\Services\ReadProblemService;
+use App\Api\V1\Domain\Problem\Services\UpdateProblemService;
 use App\Api\V1\Domain\Problem\Transformer\ProblemTransformer;
 use App\Api\V1\Domain\User\Entity\User;
 use Dingo\Api\Http\Response;
@@ -16,6 +19,10 @@ class ProblemController extends BaseController
 {
     const QUERY_LIMIT = 'limit';
     const DEFAULT_LIMIT = 10;
+
+    const QUERY_FROM = 'from';
+    const FROM_STATEMENT = 'statement';
+    const FROM_GRADING = 'grading';
 
     public function store(
         CreateProblemService $service,
@@ -65,5 +72,35 @@ class ProblemController extends BaseController
     {
         $problem = $service->readSingle($id);
         return $this->response->item($problem, $problemTransformer);
+    }
+
+    public function update(
+        UpdateProblemService $service,
+        Request $request,
+        int $id
+    ): Response
+    {
+        $this->checkRole('problem-setter');
+        $sourcePost = $request->get(self::QUERY_FROM);
+        $fields = $request->only(UpdateProblemParam::QUERY_PARAMS[$sourcePost]);
+
+        $validation = $this->getValidationFactory()->make($fields,UpdateProblemParam::QUERY_PARAM_VALIDATION[$sourcePost]);
+        $this->checkValidation($validation);
+
+        $params = new UpdateProblemParam($id);
+        $params->fromArray($fields);
+
+        $service->update($id,$params);
+        return $this->response->created();
+    }
+
+    public function delete(
+        DeleteProblemService $service,
+        int $id
+    ): Response
+    {
+        $this->checkRole('problem-setter');
+        $service->delete($id);
+        return $this->response->created();
     }
 }
