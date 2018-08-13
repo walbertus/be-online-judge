@@ -21,8 +21,6 @@ class ProblemController extends BaseController
     const DEFAULT_LIMIT = 10;
 
     const QUERY_FROM = 'from';
-    const FROM_STATEMENT = 'statement';
-    const FROM_GRADING = 'grading';
 
     public function store(
         CreateProblemService $service,
