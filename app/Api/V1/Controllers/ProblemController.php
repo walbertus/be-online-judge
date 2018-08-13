@@ -91,7 +91,7 @@ class ProblemController extends BaseController
         $params->fromArray($fields);
 
         $service->update($id,$params);
-        return $this->response->created();
+        return $this->response->noContent();
     }
 
     public function delete(
@@ -101,6 +101,6 @@ class ProblemController extends BaseController
     {
         $this->checkRole('problem-setter');
         $service->delete($id);
-        return $this->response->created();
+        return $this->response->noContent();
     }
 }
