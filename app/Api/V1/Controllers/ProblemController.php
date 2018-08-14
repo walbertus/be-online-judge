@@ -20,8 +20,6 @@ class ProblemController extends BaseController
     const QUERY_LIMIT = 'limit';
     const DEFAULT_LIMIT = 10;
 
-    const QUERY_FROM = 'from';
-
     public function store(
         CreateProblemService $service,
         Request $request
@@ -79,10 +77,9 @@ class ProblemController extends BaseController
     ): Response
     {
         $this->checkRole('problem-setter');
-        $sourcePost = $request->get(self::QUERY_FROM);
-        $fields = $request->only(UpdateProblemParam::QUERY_PARAMS[$sourcePost]);
+        $fields = $request->only(UpdateProblemParam::QUERY_PARAMS);
 
-        $validation = $this->getValidationFactory()->make($fields,UpdateProblemParam::QUERY_PARAM_VALIDATION[$sourcePost]);
+        $validation = $this->getValidationFactory()->make($fields,UpdateProblemParam::QUERY_PARAM_VALIDATION);
         $this->checkValidation($validation);
 
         $params = new UpdateProblemParam($id);
