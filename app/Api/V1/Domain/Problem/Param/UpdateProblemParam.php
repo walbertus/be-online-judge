@@ -64,7 +64,7 @@ class UpdateProblemParam
         $array = [];
         foreach (self::QUERY_PARAMS as $param){
             if($this->data[$param] !== null){
-                $array[] = $this->data[$param];
+                $array[$param] = $this->data[$param];
             }
         }
         return $array;
