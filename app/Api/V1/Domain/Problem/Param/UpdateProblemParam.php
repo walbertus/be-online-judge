@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Api\V1\Domain\Problem\Param;
 
 
@@ -12,6 +13,7 @@ class UpdateProblemParam
         Problem::ATTRIBUTE_DESCRIPTION,
         Problem::ATTRIBUTE_MEMORY_LIMIT,
         Problem::ATTRIBUTE_TIME_LIMIT,
+        Problem::ATTRIBUTE_IS_PUBLIC,
     ];
 
     const QUERY_PARAM_VALIDATION = [
@@ -23,6 +25,7 @@ class UpdateProblemParam
         Problem::ATTRIBUTE_DESCRIPTION => 'string|nullable',
         Problem::ATTRIBUTE_MEMORY_LIMIT => 'numeric|between:0,255|nullable',
         Problem::ATTRIBUTE_TIME_LIMIT => 'numeric|between:0,10000|nullable',
+        Problem::ATTRIBUTE_IS_PUBLIC => 'boolean|nullable',
     ];
 
     protected $data = [];
@@ -35,6 +38,7 @@ class UpdateProblemParam
         $this->data[Problem::ATTRIBUTE_MEMORY_LIMIT] = null;
         $this->data[Problem::ATTRIBUTE_TIME_LIMIT] = null;
         $this->data[Problem::ATTRIBUTE_OWNER_ID] = null;
+        $this->data[Problem::ATTRIBUTE_IS_PUBLIC] = null;
     }
 
     public function fromArray(array $array): void
@@ -43,7 +47,7 @@ class UpdateProblemParam
             ? $array[Problem::ATTRIBUTE_SLUG]
             : null;
         $this->data[Problem::ATTRIBUTE_TITLE] = isset($array[Problem::ATTRIBUTE_TITLE])
-            ?$array[Problem::ATTRIBUTE_TITLE]
+            ? $array[Problem::ATTRIBUTE_TITLE]
             : null;
         $this->data[Problem::ATTRIBUTE_DESCRIPTION] = isset($array[Problem::ATTRIBUTE_DESCRIPTION])
             ? $array[Problem::ATTRIBUTE_DESCRIPTION]
@@ -57,13 +61,16 @@ class UpdateProblemParam
         $this->data[Problem::ATTRIBUTE_OWNER_ID] = isset($array[Problem::ATTRIBUTE_OWNER_ID])
             ? $array[Problem::ATTRIBUTE_OWNER_ID]
             : null;
+        $this->data[Problem::ATTRIBUTE_IS_PUBLIC] = isset($array[Problem::ATTRIBUTE_IS_PUBLIC])
+            ? $array[Problem::ATTRIBUTE_IS_PUBLIC]
+            : null;
     }
 
     public function toArray(): array
     {
         $array = [];
-        foreach (self::QUERY_PARAMS as $param){
-            if($this->data[$param] !== null){
+        foreach (self::QUERY_PARAMS as $param) {
+            if ($this->data[$param] !== null) {
                 $array[$param] = $this->data[$param];
             }
         }

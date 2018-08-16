@@ -12,6 +12,7 @@ class CreateProblemParam
         Problem::ATTRIBUTE_DESCRIPTION,
         Problem::ATTRIBUTE_MEMORY_LIMIT,
         Problem::ATTRIBUTE_TIME_LIMIT,
+        Problem::ATTRIBUTE_IS_PUBLIC,
     ];
 
     const QUERY_PARAM_VALIDATION = [
@@ -24,6 +25,7 @@ class CreateProblemParam
         Problem::ATTRIBUTE_DESCRIPTION => 'string|required',
         Problem::ATTRIBUTE_MEMORY_LIMIT => 'numeric|nullable|between:0,255',
         Problem::ATTRIBUTE_TIME_LIMIT => 'numeric|nullable|between:0,10000',
+        Problem::ATTRIBUTE_IS_PUBLIC => 'boolean|required',
     ];
 
     protected $data = [];
@@ -36,6 +38,7 @@ class CreateProblemParam
         $this->data[Problem::ATTRIBUTE_MEMORY_LIMIT] = null;
         $this->data[Problem::ATTRIBUTE_TIME_LIMIT] = null;
         $this->data[Problem::ATTRIBUTE_OWNER_ID] = null;
+        $this->data[Problem::ATTRIBUTE_IS_PUBLIC] = null;
     }
 
     public function fromArray(array $array): void
@@ -43,6 +46,7 @@ class CreateProblemParam
         $this->data[Problem::ATTRIBUTE_SLUG] = $array[Problem::ATTRIBUTE_SLUG];
         $this->data[Problem::ATTRIBUTE_TITLE] = $array[Problem::ATTRIBUTE_TITLE];
         $this->data[Problem::ATTRIBUTE_DESCRIPTION] = $array[Problem::ATTRIBUTE_DESCRIPTION];
+        $this->data[Problem::ATTRIBUTE_IS_PUBLIC] = $array[Problem::ATTRIBUTE_IS_PUBLIC];
         $this->data[Problem::ATTRIBUTE_MEMORY_LIMIT] = isset($array[Problem::ATTRIBUTE_MEMORY_LIMIT])
             ? $array[Problem::ATTRIBUTE_MEMORY_LIMIT]
             : Problem::DEFAULT_MEMORY_LIMIT;

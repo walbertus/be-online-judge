@@ -15,6 +15,7 @@ class CreateProblemsTable extends Migration
             $table->text('description');
             $table->smallInteger('memory_limit');
             $table->integer('time_limit');
+            $table->boolean('is_public');
             $table->unsignedInteger('owner_id');
             $table->timestamps();
 

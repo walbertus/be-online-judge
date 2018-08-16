@@ -27,6 +27,7 @@ class ProblemTransformer extends TransformerAbstract
             Problem::ATTRIBUTE_TIME_LIMIT => $problem->getAttribute(Problem::ATTRIBUTE_TIME_LIMIT),
             Problem::ATTRIBUTE_MEMORY_LIMIT => $problem->getAttribute(Problem::ATTRIBUTE_MEMORY_LIMIT),
             Problem::ATTRIBUTE_SLUG => $problem->getAttribute(Problem::ATTRIBUTE_SLUG),
+            Problem::ATTRIBUTE_IS_PUBLIC => $problem->getAttribute(Problem::ATTRIBUTE_IS_PUBLIC),
             'owner' => $owner
         ];
     }
