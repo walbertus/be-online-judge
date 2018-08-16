@@ -12,6 +12,7 @@ class ProblemQueryGenerator
     {
         $finalQuery = [];
         $finalQuery = $this->buildOwnerIdQuery($finalQuery, $queryParams);
+        $finalQuery = $this->buildIsPublicQuery($finalQuery, $queryParams);
 
         return $finalQuery;
     }
@@ -26,7 +27,7 @@ class ProblemQueryGenerator
 
     public function buildIsPublicQuery(array $query, ReadProblemParam $queryParams): array
     {
-        if ($queryParams->getIsPublic()) {
+        if ($queryParams->getIsPublic() && !$queryParams->getOwnerId()) {
             $query[] = [Problem::ATTRIBUTE_IS_PUBLIC, $queryParams->getIsPublic()];
         }
         return $query;

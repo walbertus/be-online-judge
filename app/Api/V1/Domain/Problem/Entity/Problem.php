@@ -27,6 +27,7 @@ class Problem extends Model
         self::ATTRIBUTE_MEMORY_LIMIT,
         self::ATTRIBUTE_TIME_LIMIT,
         self::ATTRIBUTE_OWNER_ID,
+        self::ATTRIBUTE_IS_PUBLIC,
     ];
 
     public function owner(): BelongsTo

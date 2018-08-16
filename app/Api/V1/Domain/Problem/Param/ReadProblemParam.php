@@ -14,7 +14,7 @@ class ReadProblemParam
 
     const QUERY_PARAMS_VALIDATION = [
         Problem::ATTRIBUTE_OWNER_ID => 'numeric|nullable',
-        Problem::ATTRIBUTE_IS_PUBLIC => 'boolean|nullable',
+        Problem::ATTRIBUTE_IS_PUBLIC => 'string|nullable',
     ];
 
     protected $data = [];
@@ -36,7 +36,7 @@ class ReadProblemParam
         return $this->data[Problem::ATTRIBUTE_OWNER_ID];
     }
 
-    public function getIsPublic(): ?int
+    public function getIsPublic(): ?bool
     {
         return $this->data[Problem::ATTRIBUTE_IS_PUBLIC];
     }

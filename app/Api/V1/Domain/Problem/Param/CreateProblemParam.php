@@ -46,7 +46,9 @@ class CreateProblemParam
         $this->data[Problem::ATTRIBUTE_SLUG] = $array[Problem::ATTRIBUTE_SLUG];
         $this->data[Problem::ATTRIBUTE_TITLE] = $array[Problem::ATTRIBUTE_TITLE];
         $this->data[Problem::ATTRIBUTE_DESCRIPTION] = $array[Problem::ATTRIBUTE_DESCRIPTION];
-        $this->data[Problem::ATTRIBUTE_IS_PUBLIC] = $array[Problem::ATTRIBUTE_IS_PUBLIC];
+        $this->data[Problem::ATTRIBUTE_IS_PUBLIC] = isset($array[Problem::ATTRIBUTE_IS_PUBLIC])
+            ? $array[Problem::ATTRIBUTE_IS_PUBLIC]
+            : null;
         $this->data[Problem::ATTRIBUTE_MEMORY_LIMIT] = isset($array[Problem::ATTRIBUTE_MEMORY_LIMIT])
             ? $array[Problem::ATTRIBUTE_MEMORY_LIMIT]
             : Problem::DEFAULT_MEMORY_LIMIT;
