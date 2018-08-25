@@ -21,6 +21,8 @@ $api->version('v1', function (Router $api) {
             $api->post('/', 'ProblemController@store')->middleware('auth:api');
             $api->get('/','ProblemController@index')->middleware('auth:api');
             $api->get('/{id}','ProblemController@show')->middleware('auth:api');
+            $api->post('/{id}','ProblemController@update')->middleware('auth:api');
+            $api->delete('/{id}','ProblemController@delete')->middleware('auth:api');
         });
     });
 });
