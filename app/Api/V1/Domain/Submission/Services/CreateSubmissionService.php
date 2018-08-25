@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ferdinand
- * Date: 8/25/18
- * Time: 11:49 AM
- */
 
 namespace App\Api\V1\Domain\Submission\Services;
 
@@ -24,7 +18,7 @@ class CreateSubmissionService
 
     public function createOne(CreateSubmissionParam $param): Submission
     {
-        $filename = $param->saveSubmissionFile();
+        $filename = $param->saveSubmissionCode();
         $param->setFilename($filename);
         return $this->repository->createOne($param->toArray());
     }

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ferdinand
- * Date: 8/25/18
- * Time: 11:50 AM
- */
 
 namespace App\Api\V1\Domain\Submission\Param;
 
@@ -14,14 +8,15 @@ use Illuminate\Support\Facades\Storage;
 
 class CreateSubmissionParam
 {
-    const SUBMISSION_FILE_PARAM = 'submission_file';
+    const SUBMISSION_CODE_PARAM = 'submission_code';
+    const DEFAULT_CONTEST_ID = 0;
 
     const QUERY_PARAMS = [
         Submission::ATTRIBUTE_USER_ID,
         Submission::ATTRIBUTE_PROBLEM_ID,
         Submission::ATTRIBUTE_CONTEST_ID,
         Submission::ATTRIBUTE_LANGUAGE_ID,
-        self::SUBMISSION_FILE_PARAM,
+        self::SUBMISSION_CODE_PARAM,
     ];
 
     const QUERY_PARAMS_VALIDATION = [
@@ -29,11 +24,11 @@ class CreateSubmissionParam
         Submission::ATTRIBUTE_PROBLEM_ID => 'numeric|required',
         Submission::ATTRIBUTE_CONTEST_ID => 'numeric|nullable',
         Submission::ATTRIBUTE_LANGUAGE_ID => 'numeric|required',
-        self::SUBMISSION_FILE_PARAM => 'file|required',
+        self::SUBMISSION_CODE_PARAM => 'string|required',
     ];
 
     protected $data = [];
-    protected $submissionFile = null;
+    protected $submissionCode = null;
 
     public function __construct()
     {
@@ -48,31 +43,33 @@ class CreateSubmissionParam
     {
         $this->data[Submission::ATTRIBUTE_USER_ID] = $array[Submission::ATTRIBUTE_USER_ID];
         $this->data[Submission::ATTRIBUTE_PROBLEM_ID] = $array[Submission::ATTRIBUTE_PROBLEM_ID];
-        $this->data[Submission::ATTRIBUTE_CONTEST_ID] = $array[Submission::ATTRIBUTE_CONTEST_ID];
+        $this->data[Submission::ATTRIBUTE_CONTEST_ID] = isset($array[Submission::ATTRIBUTE_CONTEST_ID])
+            ? $array[Submission::ATTRIBUTE_CONTEST_ID]
+            : self::DEFAULT_CONTEST_ID;
         $this->data[Submission::ATTRIBUTE_LANGUAGE_ID] = $array[Submission::ATTRIBUTE_LANGUAGE_ID];
-        $this->submissionFile = $array[self::SUBMISSION_FILE_PARAM];
+        $this->submissionCode = $array[self::SUBMISSION_CODE_PARAM];
     }
 
-    public function saveSubmissionFile(): string
+    public function checkDirectory(string $path): void
     {
-        $contestPath = ($this->getContestId() !== null) ? 'contest/' . $this->getContestId() : '';
+        if (is_dir($path)) {
+            Storage::makeDirectory($path);
+        }
+    }
 
-        $destinationPath = storage_path(
-            $contestPath .
-            '/problem/' . $this->getProblemId()
-        );
+    public function saveSubmissionCode(): string
+    {
+        $contestPath = ($this->getContestId() !== 0) ? 'contest/' . $this->getContestId() : '';
+
+        $destinationPath = $contestPath . '/problem/' . $this->getProblemId() . '/' ;
 
         $this->checkDirectory($destinationPath);
 
-        $filename = $this->getUserId() . now()->timestamp . $this->submissionFile->getClientOriginalName();
+        $filename = $destinationPath . $this->getUserId() . '_' . $this->getProblemId() . '_' . now()->timestamp . '_' .'solution.cpp';
 
-        Storage::putFileAs(
-            self::SUBMISSION_FILE_PARAM,
-            $this->submissionFile,
-            $filename
-        );
+        Storage::put($filename,$this->submissionCode);
 
-        return $destinationPath . $filename;
+        return $filename;
     }
 
     public function getContestId(): int
@@ -85,16 +82,14 @@ class CreateSubmissionParam
         return $this->data[Submission::ATTRIBUTE_PROBLEM_ID];
     }
 
-    public function checkDirectory(string $path): void
-    {
-        if (is_dir($path)) {
-            Storage::makeDirectory($path);
-        }
-    }
-
     public function getUserId(): int
     {
         return $this->data[Submission::ATTRIBUTE_USER_ID];
+    }
+
+    public function getCode(): string
+    {
+        return $this->data[self::SUBMISSION_CODE_PARAM];
     }
 
     public function setFilename(string $filename): void

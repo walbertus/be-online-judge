@@ -24,5 +24,9 @@ $api->version('v1', function (Router $api) {
             $api->post('/{id}','ProblemController@update')->middleware('auth:api');
             $api->delete('/{id}','ProblemController@delete')->middleware('auth:api');
         });
+
+        $api->group(['prefix' => 'submissions'], function (Router $api) {
+            $api->post('/','SubmissionController@store')->middleware('auth:api');
+        });
     });
 });
