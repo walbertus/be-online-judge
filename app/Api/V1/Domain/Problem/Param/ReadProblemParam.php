@@ -14,7 +14,7 @@ class ReadProblemParam
 
     const QUERY_PARAMS_VALIDATION = [
         Problem::ATTRIBUTE_OWNER_ID => 'numeric|nullable',
-        Problem::ATTRIBUTE_IS_PUBLIC => 'string|nullable',
+        Problem::ATTRIBUTE_IS_PUBLIC => 'boolean|nullable',
     ];
 
     protected $data = [];
