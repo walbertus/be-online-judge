@@ -15,6 +15,7 @@ class Problem extends Model
     const ATTRIBUTE_DESCRIPTION = 'description';
     const ATTRIBUTE_MEMORY_LIMIT = 'memory_limit';
     const ATTRIBUTE_TIME_LIMIT = 'time_limit';
+    const ATTRIBUTE_IS_PUBLIC = 'is_public';
 
     const DEFAULT_MEMORY_LIMIT = 64;
     const DEFAULT_TIME_LIMIT = 1000;
@@ -26,6 +27,7 @@ class Problem extends Model
         self::ATTRIBUTE_MEMORY_LIMIT,
         self::ATTRIBUTE_TIME_LIMIT,
         self::ATTRIBUTE_OWNER_ID,
+        self::ATTRIBUTE_IS_PUBLIC,
     ];
 
     public function owner(): BelongsTo

@@ -3,32 +3,41 @@
 namespace App\Api\V1\Domain\Problem\Param;
 
 
+use App\Api\V1\Domain\Problem\Entity\Problem;
+
 class ReadProblemParam
 {
-    const ATTRIBUTE_OWNER_ID = 'owner_id';
-
     const QUERY_PARAMS = [
-        ReadProblemParam::ATTRIBUTE_OWNER_ID,
+        Problem::ATTRIBUTE_OWNER_ID,
+        Problem::ATTRIBUTE_IS_PUBLIC,
     ];
 
     const QUERY_PARAMS_VALIDATION = [
-        ReadProblemParam::ATTRIBUTE_OWNER_ID => 'numeric|nullable',
+        Problem::ATTRIBUTE_OWNER_ID => 'numeric|nullable',
+        Problem::ATTRIBUTE_IS_PUBLIC => 'boolean|nullable',
     ];
 
     protected $data = [];
 
     public function __construct()
     {
-        $this->data[ReadProblemParam::ATTRIBUTE_OWNER_ID] = null;
+        $this->data[Problem::ATTRIBUTE_OWNER_ID] = null;
+        $this->data[Problem::ATTRIBUTE_IS_PUBLIC] = null;
     }
 
     public function fromArray(array $array): void
     {
-        $this->data[ReadProblemParam::ATTRIBUTE_OWNER_ID] = $array[ReadProblemParam::ATTRIBUTE_OWNER_ID];
+        $this->data[Problem::ATTRIBUTE_OWNER_ID] = $array[Problem::ATTRIBUTE_OWNER_ID];
+        $this->data[Problem::ATTRIBUTE_IS_PUBLIC] = $array[Problem::ATTRIBUTE_IS_PUBLIC];
     }
 
     public function getOwnerId(): ?int
     {
-        return $this->data[ReadProblemParam::ATTRIBUTE_OWNER_ID];
+        return $this->data[Problem::ATTRIBUTE_OWNER_ID];
+    }
+
+    public function getIsPublic(): ?bool
+    {
+        return $this->data[Problem::ATTRIBUTE_IS_PUBLIC];
     }
 }

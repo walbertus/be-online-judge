@@ -30,4 +30,14 @@ class ProblemRepository
     {
         return Problem::find($id);
     }
+
+    public function update(int $id, array $data): void
+    {
+        Problem::find($id)->update($data);
+    }
+
+    public function delete(int $id): void
+    {
+        Problem::find($id)->delete();
+    }
 }

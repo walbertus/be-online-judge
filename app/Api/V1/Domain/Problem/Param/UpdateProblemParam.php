@@ -2,9 +2,10 @@
 
 namespace App\Api\V1\Domain\Problem\Param;
 
+
 use App\Api\V1\Domain\Problem\Entity\Problem;
 
-class CreateProblemParam
+class UpdateProblemParam
 {
     const QUERY_PARAMS = [
         Problem::ATTRIBUTE_SLUG,
@@ -17,20 +18,19 @@ class CreateProblemParam
 
     const QUERY_PARAM_VALIDATION = [
         Problem::ATTRIBUTE_SLUG => [
-            'required',
+            'nullable',
             'regex:/^[A-Z0-9]+(?:-[A-Z0-9]+)*$/',
-            'unique:problems,slug'
         ],
-        Problem::ATTRIBUTE_TITLE => 'string|required',
-        Problem::ATTRIBUTE_DESCRIPTION => 'string|required',
-        Problem::ATTRIBUTE_MEMORY_LIMIT => 'numeric|nullable|between:0,255',
-        Problem::ATTRIBUTE_TIME_LIMIT => 'numeric|nullable|between:0,10000',
-        Problem::ATTRIBUTE_IS_PUBLIC => 'boolean|required',
+        Problem::ATTRIBUTE_TITLE => 'string|nullable',
+        Problem::ATTRIBUTE_DESCRIPTION => 'string|nullable',
+        Problem::ATTRIBUTE_MEMORY_LIMIT => 'numeric|between:0,255|nullable',
+        Problem::ATTRIBUTE_TIME_LIMIT => 'numeric|between:0,10000|nullable',
+        Problem::ATTRIBUTE_IS_PUBLIC => 'boolean|nullable',
     ];
 
     protected $data = [];
 
-    public function __construct()
+    public function __construct(int $id)
     {
         $this->data[Problem::ATTRIBUTE_SLUG] = null;
         $this->data[Problem::ATTRIBUTE_TITLE] = null;
@@ -43,30 +43,37 @@ class CreateProblemParam
 
     public function fromArray(array $array): void
     {
-        $this->data[Problem::ATTRIBUTE_SLUG] = $array[Problem::ATTRIBUTE_SLUG];
-        $this->data[Problem::ATTRIBUTE_TITLE] = $array[Problem::ATTRIBUTE_TITLE];
-        $this->data[Problem::ATTRIBUTE_DESCRIPTION] = $array[Problem::ATTRIBUTE_DESCRIPTION];
-        $this->data[Problem::ATTRIBUTE_IS_PUBLIC] = isset($array[Problem::ATTRIBUTE_IS_PUBLIC])
-            ? $array[Problem::ATTRIBUTE_IS_PUBLIC]
+        $this->data[Problem::ATTRIBUTE_SLUG] = isset($array[Problem::ATTRIBUTE_SLUG])
+            ? $array[Problem::ATTRIBUTE_SLUG]
+            : null;
+        $this->data[Problem::ATTRIBUTE_TITLE] = isset($array[Problem::ATTRIBUTE_TITLE])
+            ? $array[Problem::ATTRIBUTE_TITLE]
+            : null;
+        $this->data[Problem::ATTRIBUTE_DESCRIPTION] = isset($array[Problem::ATTRIBUTE_DESCRIPTION])
+            ? $array[Problem::ATTRIBUTE_DESCRIPTION]
             : null;
         $this->data[Problem::ATTRIBUTE_MEMORY_LIMIT] = isset($array[Problem::ATTRIBUTE_MEMORY_LIMIT])
             ? $array[Problem::ATTRIBUTE_MEMORY_LIMIT]
-            : Problem::DEFAULT_MEMORY_LIMIT;
+            : null;
         $this->data[Problem::ATTRIBUTE_TIME_LIMIT] = isset($array[Problem::ATTRIBUTE_TIME_LIMIT])
             ? $array[Problem::ATTRIBUTE_TIME_LIMIT]
-            : Problem::DEFAULT_TIME_LIMIT;
+            : null;
         $this->data[Problem::ATTRIBUTE_OWNER_ID] = isset($array[Problem::ATTRIBUTE_OWNER_ID])
             ? $array[Problem::ATTRIBUTE_OWNER_ID]
             : null;
-    }
-
-    public function setOwnerId(int $ownerId): void
-    {
-        $this->data[Problem::ATTRIBUTE_OWNER_ID] = $ownerId;
+        $this->data[Problem::ATTRIBUTE_IS_PUBLIC] = isset($array[Problem::ATTRIBUTE_IS_PUBLIC])
+            ? $array[Problem::ATTRIBUTE_IS_PUBLIC]
+            : null;
     }
 
     public function toArray(): array
     {
-        return $this->data;
+        $array = [];
+        foreach (self::QUERY_PARAMS as $param) {
+            if ($this->data[$param] !== null) {
+                $array[$param] = $this->data[$param];
+            }
+        }
+        return $array;
     }
 }
